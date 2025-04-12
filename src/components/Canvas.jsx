@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import { Button, HStack, Icon, VStack } from "@chakra-ui/react";
+import { Button, Heading, HStack, Icon, VStack } from "@chakra-ui/react";
 import { BiSave, BiTrash } from "react-icons/bi";
 
-function Canvas({ onSave }) {
+function Canvas({ onSave, prompt }) {
   const ref = useRef(null);
   const [drawing, setDrawing] = useState(false);
 
@@ -40,6 +40,7 @@ function Canvas({ onSave }) {
 
   return (
     <VStack spacing={8} mb={20}>
+      {prompt && <Heading size="md">{prompt}</Heading>}
       <HStack mt={6} spacing={8}>
         <Button
           leftIcon={<Icon boxSize={6} as={BiSave} />}

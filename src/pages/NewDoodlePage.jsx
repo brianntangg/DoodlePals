@@ -3,15 +3,17 @@ import Canvas from "../components/Canvas.jsx";
 import { useState } from "react";
 import PublishDoodleForm from "../components/PublishDoodleForm.jsx";
 import { useDb } from "../providers/DatabaseProvider.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function NewDoodlePage() {
   const db = useDb();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const prompt = searchParams.get("prompt");
   const [preview, setPreview] = useState(null);
 
   async function publish(title) {
-    await db.createDoodle({ title, data: preview });
+    await db.createDoodle({ title, data: preview, prompt });
     navigate("/doodles");
   }
 
@@ -22,7 +24,7 @@ function NewDoodlePage() {
         <PublishDoodleForm onPublish={publish} url={preview} />
       ) : (
         <HStack justify="center">
-          <Canvas onSave={(url) => setPreview(url)} />
+          <Canvas onSave={(url) => setPreview(url)} prompt={prompt} />
         </HStack>
       )}
     </Flex>
