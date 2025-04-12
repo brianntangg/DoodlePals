@@ -32,6 +32,12 @@ function Canvas({ onSave }) {
     onSave(url);
   }
 
+  function clear() {
+    const canvas = ref.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
   return (
     <VStack spacing={8}>
       <HStack mt={6} spacing={8}>
@@ -42,7 +48,7 @@ function Canvas({ onSave }) {
         >
           Save
         </Button>
-        <Button leftIcon={<Icon boxSize={6} as={BiTrash} />} colorScheme="red">
+        <Button leftIcon={<Icon boxSize={6} as={BiTrash} />} colorScheme="red" onClick={clear}>
           Clear
         </Button>
       </HStack>
