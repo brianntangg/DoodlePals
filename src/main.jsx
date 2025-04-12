@@ -1,4 +1,5 @@
 import { StrictMode } from "react";
+import "./main.sass";
 import { createRoot } from "react-dom/client";
 import { initializeApp } from "firebase/app";
 import Providers from "./providers/Providers.jsx";
