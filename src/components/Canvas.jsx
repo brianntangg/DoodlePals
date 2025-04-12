@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
+import { Button, HStack, Icon, VStack } from "@chakra-ui/react";
+import { BiSave, BiTrash } from "react-icons/bi";
 
-function Canvas() {
+function Canvas({ onSave }) {
   const ref = useRef(null);
   const [drawing, setDrawing] = useState(false);
 
@@ -24,17 +26,37 @@ function Canvas() {
     ctx.fillRect(x, y, pixelSize, pixelSize);
   }
 
+  function save() {
+    const canvas = ref.current;
+    const url = canvas.toDataURL("image/png");
+    onSave(url);
+  }
+
   return (
-    <canvas
-      ref={ref}
-      width={600}
-      height={600}
-      className="doodle-canvas"
-      onMouseDown={startDrawing}
-      onMouseUp={stopDrawing}
-      onMouseLeave={stopDrawing}
-      onMouseMove={mouseMove}
-    />
+    <VStack spacing={8}>
+      <HStack mt={6} spacing={8}>
+        <Button
+          leftIcon={<Icon boxSize={6} as={BiSave} />}
+          colorScheme="green"
+          onClick={save}
+        >
+          Save
+        </Button>
+        <Button leftIcon={<Icon boxSize={6} as={BiTrash} />} colorScheme="red">
+          Clear
+        </Button>
+      </HStack>
+      <canvas
+        ref={ref}
+        width={600}
+        height={600}
+        className="doodle-canvas"
+        onMouseDown={startDrawing}
+        onMouseUp={stopDrawing}
+        onMouseLeave={stopDrawing}
+        onMouseMove={mouseMove}
+      />
+    </VStack>
   );
 }
 
