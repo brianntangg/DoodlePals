@@ -39,7 +39,7 @@ function Canvas({ onSave }) {
   }
 
   return (
-    <VStack spacing={8}>
+    <VStack spacing={8} mb={20}>
       <HStack mt={6} spacing={8}>
         <Button
           leftIcon={<Icon boxSize={6} as={BiSave} />}
@@ -48,7 +48,11 @@ function Canvas({ onSave }) {
         >
           Save
         </Button>
-        <Button leftIcon={<Icon boxSize={6} as={BiTrash} />} colorScheme="red" onClick={clear}>
+        <Button
+          leftIcon={<Icon boxSize={6} as={BiTrash} />}
+          colorScheme="red"
+          onClick={clear}
+        >
           Clear
         </Button>
       </HStack>
@@ -56,7 +60,7 @@ function Canvas({ onSave }) {
         ref={ref}
         width={600}
         height={600}
-        className="doodle-canvas"
+        className="border"
         onMouseDown={startDrawing}
         onMouseUp={stopDrawing}
         onMouseLeave={stopDrawing}
