@@ -80,6 +80,7 @@ function LoggedInControls() {
     <>
       <HStack spacing={8}>
         <NavLink path="/doodles">My Doodles</NavLink>
+        <NavLink path="/community">Community Doodles</NavLink>
         <NavLink path="/new">Create Doodle</NavLink>
       </HStack>
       <Spacer />
