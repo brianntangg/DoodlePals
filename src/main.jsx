@@ -17,6 +17,7 @@ import SignUpPage from "./pages/SignUpPage.jsx";
 import NavBar from "./components/NavBar.jsx";
 import DoodlesPage from "./pages/DoodlesPage.jsx";
 import DoodlePage from "./pages/DoodlePage.jsx";
+import NewDoodlePage from "./pages/NewDoodlePage.jsx";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDZG6IVe8PHhbehLi5ge2TsFUoavM1ecU4",
@@ -50,6 +51,14 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <DoodlesPage />
           </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/newDoodle",
+        element: (
+            <ProtectedRoute>
+              <NewDoodlePage />
+            </ProtectedRoute>
         ),
       },
       {
