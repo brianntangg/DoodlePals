@@ -80,7 +80,7 @@ function LoggedInControls() {
     <>
       <HStack spacing={8}>
         <NavLink path="/doodles">My Doodles</NavLink>
-        <NavLink path="/newDoodle">Create Doodle</NavLink>
+        <NavLink path="/new">Create Doodle</NavLink>
       </HStack>
       <Spacer />
       <ChakraLink as={ReactRouterLink} to="/logout">

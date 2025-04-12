@@ -54,11 +54,11 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/newDoodle",
+        path: "/new",
         element: (
-            <ProtectedRoute>
-              <NewDoodlePage />
-            </ProtectedRoute>
+          <ProtectedRoute>
+            <NewDoodlePage />
+          </ProtectedRoute>
         ),
       },
       {
