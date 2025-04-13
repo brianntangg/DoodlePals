@@ -76,12 +76,12 @@ function CommunityDoodlesPage() {
           case "mostLiked":
             return (b.likes?.length || 0) - (a.likes?.length || 0);
           case "oldest":
-            { const aTimeOld = a.createdAt?.toMillis ? a.createdAt.toMillis() : a.createdAt;
-            const bTimeOld = b.createdAt?.toMillis ? b.createdAt.toMillis() : b.createdAt;
+            { const aTimeOld = a.createTime?.toMillis ? a.createTime.toMillis() : a.createTime;
+            const bTimeOld = b.createTime?.toMillis ? b.createTime.toMillis() : b.createTime;
             return aTimeOld - bTimeOld; }
           case "newest":
-            { const aTime = a.createdAt?.toMillis ? a.createdAt.toMillis() : a.createdAt;
-              const bTime = b.createdAt?.toMillis ? b.createdAt.toMillis() : b.createdAt;
+            { const aTime = a.createTime?.toMillis ? a.createTime.toMillis() : a.createTime;
+              const bTime = b.createTime?.toMillis ? b.createTime.toMillis() : b.createTime;
               return bTime - aTime;
             }
           default:
