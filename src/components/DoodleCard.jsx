@@ -1,5 +1,16 @@
-import { Card, CardBody, CardHeader, Heading, Image } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Heading,
+  Icon,
+  Image,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { BiComment, BiHeart } from "react-icons/bi";
 
 export default function DoodleCard({ id, doodle }) {
   const navigate = useNavigate();
@@ -17,6 +28,24 @@ export default function DoodleCard({ id, doodle }) {
         <CardBody>
           <Image src={doodle.data} className="border" />
         </CardBody>
+        <CardFooter>
+          <ButtonGroup gap={4}>
+            <Button
+              colorScheme="white"
+              leftIcon={<Icon boxSize={6} as={BiHeart} />}
+              variant="ghost"
+            >
+              {doodle.likes}
+            </Button>
+            <Button
+              colorScheme="white"
+              leftIcon={<Icon boxSize={6} as={BiComment} />}
+              variant="ghost"
+            >
+              {doodle.numComments}
+            </Button>
+          </ButtonGroup>
+        </CardFooter>
       </Card>
     </>
   );
