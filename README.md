@@ -28,8 +28,6 @@
 - **Firebase**: A Backend-as-a-Service platform providing the following services:
   - **Firestore**: A NoSQL database for storing user data, doodles, and interactions.
   - **Authentication**: Secure user login and account management using email verification.
-  - **Cloud Storage**: Storage for doodle images and other media files.
-  - **Cloud Functions**: Serverless functions for backend logic to manage data and notifications.
 
 ## Art Therapy Benefits
 
