@@ -4,7 +4,6 @@ import { useState } from "react";
 import PublishDoodleForm from "../components/PublishDoodleForm.jsx";
 import { useDb } from "../providers/DatabaseProvider.jsx";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useTimer } from 'react-timer-hook'; // derrick's new code
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'; //Derrick's circular timer
 import { Text } from "@chakra-ui/react"; // derrick's new code
 
@@ -15,18 +14,11 @@ function NewDoodlePage() {
   const [searchParams] = useSearchParams();
   const prompt = searchParams.get("prompt");
   const [preview, setPreview] = useState(null);
-
+  const [timerExpired, setTimerExpired] = useState(false); //Derrick useState
   const isDaily = searchParams.get("daily") === "true"; // Derrick's timer code
 
   const time = new Date();
   time.setSeconds(time.getSeconds() + 60);
-
-  const { isRunning} = useTimer({
-    expiryTimestamp: time,
-    autoStart: isDaily,
-    onExpire: () => console.  log("Time's up!"),
-  });
-
 
   async function publish(title) {
     await db.createDoodle({
@@ -58,7 +50,11 @@ function NewDoodlePage() {
                   colorsTime={[60, 20, 0]}
                   size={100}
                   strokeWidth={6}
-                  onComplete={() => console.log("Time's up (visual)!")}
+                  onComplete={() => {
+                    setTimerExpired(true);
+                    return { shouldRepeat: false };
+                  }}
+
               >
                 {({ remainingTime }) => (
                     <Text fontSize="lg" fontWeight="bold">
@@ -76,7 +72,7 @@ function NewDoodlePage() {
       ) : (
         <HStack justify="center">
           <Canvas onSave={(url) => setPreview(url)} prompt={prompt}
-                  disabled={isDaily && !isRunning} // Derrick's disabler!
+                  disabled={isDaily && timerExpired} // Derrick's disabler!
           />
         </HStack>
       )}

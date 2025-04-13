@@ -6,6 +6,9 @@ import {
   Link as ChakraLink,
   Wrap,
   WrapItem,
+  Spinner, // Derrick's spinner
+  Skeleton
+
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDb } from "../providers/DatabaseProvider.jsx";
@@ -15,14 +18,16 @@ import { BiTime } from "react-icons/bi"; // derrick added this
 import DoodleCard from "../components/DoodleCard.jsx";
 import { useAuth } from "../providers/AuthProvider.jsx";
 
+
 function DoodlesPage() {
   const db = useDb();
   const auth = useAuth();
   const [loading, setLoading] = useState(true);
   const [doodles, setDoodles] = useState([]);
   const [prompt, setPrompt] = useState('');
+  const [promptLoading, setPromptLoading] = useState(true); //Derrick's loading
 
-  useEffect(() => {
+    useEffect(() => {
     const fetchPrompt = async () => {
       try {
         console.log('Fetching prompt...');
@@ -33,6 +38,9 @@ function DoodlesPage() {
       } catch (error) {
         console.error('Error fetching prompt:', error);
         setPrompt('What does your emotional support creature look like today?');
+      }
+      finally { //derrick's final
+          setPromptLoading(false);
       }
     };
 
@@ -74,7 +82,13 @@ function DoodlesPage() {
       <Heading size="lg">My Doodles</Heading>
       <Box bg="white" rounded="lg" shadow="md" p={6} my={8}>
         <Heading size="md" mb={2}>Today's Prompt:</Heading>
-        <Box color="gray.700" fontStyle="italic">{prompt}</Box>
+
+          {promptLoading ? ( //Derrick's Prompt Loading
+              <Spinner size="md" color="gray.500" />
+          ) : (
+              <Box color="gray.700" fontStyle="italic">{prompt}</Box>
+          )}
+
       </Box>
 
       <Button // Derrick's addition (Daily Doodle button)
