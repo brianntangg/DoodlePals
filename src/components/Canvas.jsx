@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Button, Heading, HStack, Icon, VStack } from "@chakra-ui/react";
-import { BiSave, BiTrash } from "react-icons/bi";
+import { BiEraser, BiSave } from "react-icons/bi";
 
 function Canvas({ onSave, prompt }) {
   const ref = useRef(null);
@@ -50,7 +50,7 @@ function Canvas({ onSave, prompt }) {
           Save
         </Button>
         <Button
-          leftIcon={<Icon boxSize={6} as={BiTrash} />}
+          leftIcon={<Icon boxSize={6} as={BiEraser} />}
           colorScheme="red"
           onClick={clear}
         >
