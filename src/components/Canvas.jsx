@@ -8,7 +8,7 @@ function Canvas({ onSave, prompt, disabled }) {
   const [drawing, setDrawing] = useState(false);
   const [lastPos, setLastPos] = useState(null);
   const [penSize, setPenSize] = useState(10);
-  const [penColor, setPenColor] = useState("black");
+  const [penColor, setPenColor] = useState("#000000");
   const [tool, setTool] = useState("pencil");
 
   function startDrawing() {
@@ -121,7 +121,13 @@ function Canvas({ onSave, prompt, disabled }) {
           onMouseLeave={stopDrawing}
           onMouseMove={mouseMove}
         />
-        <Toolbar setTool={setTool} penSize={penSize} setPenSize={setPenSize} />
+        <Toolbar
+          setTool={setTool}
+          penSize={penSize}
+          setPenSize={setPenSize}
+          penColor={penColor}
+          setPenColor={setPenColor}
+        />
       </HStack>
     </VStack>
   );

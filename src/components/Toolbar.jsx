@@ -2,6 +2,7 @@ import { useRadioGroup, VStack } from "@chakra-ui/react";
 import ToolbarButton from "./ToolbarButton.jsx";
 import { BiEraser, BiPencil } from "react-icons/bi";
 import PenSizePicker from "./PenSizePicker.jsx";
+import PenColorPicker from "./PenColorPicker.jsx";
 
 export default function Toolbar(props) {
   const options = [
@@ -21,6 +22,7 @@ export default function Toolbar(props) {
         return <ToolbarButton key={value} {...radio} icon={icon} {...props} />;
       })}
       <PenSizePicker {...props} />
+      <PenColorPicker {...props} />
     </VStack>
   );
 }
