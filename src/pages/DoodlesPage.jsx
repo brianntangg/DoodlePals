@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useDb } from "../providers/DatabaseProvider.jsx";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { BiPencil } from "react-icons/bi";
+import { BiTime } from "react-icons/bi"; // derrick added this
 import DoodleCard from "../components/DoodleCard.jsx";
 import { useAuth } from "../providers/AuthProvider.jsx";
 
@@ -75,17 +76,32 @@ function DoodlesPage() {
         <Heading size="md" mb={2}>Today's Prompt:</Heading>
         <Box color="gray.700" fontStyle="italic">{prompt}</Box>
       </Box>
+
+      <Button // Derrick's addition (Daily Doodle button)
+          as={ReactRouterLink}
+          to={`/new?daily=true&prompt=${encodeURIComponent(prompt)}`}
+          mt={8}
+          mb={12}
+          leftIcon={<Icon boxSize={5} as={BiTime} />}
+          colorScheme="purple"
+          isDisabled={loading}
+      >
+        Daily Doodle
+      </Button>
+
       <Button
         as={ReactRouterLink}
         to="/new"
         mt={8}
         mb={12}
+        ml={4}
         leftIcon={<Icon boxSize={6} as={BiPencil} />}
         colorScheme="green"
         isDisabled={loading}
       >
         Create Doodle
       </Button>
+
       {loading ? (
         <Heading size="md" color="gray">
           Loading&hellip;
