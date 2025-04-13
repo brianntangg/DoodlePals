@@ -26,6 +26,11 @@ export default function DatabaseProvider({ children }) {
     return collection(db, "users", auth.user.uid, "doodles");
   }
 
+  async function getUser(id) {
+    const snapshot = await getDoc(doc(db, "users", id));
+    return snapshot.data();
+  }
+
   async function getAllDoodles() {
     const snapshot = await getDocs(doodles());
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -51,6 +56,7 @@ export default function DatabaseProvider({ children }) {
 
   const value = {
     doodles,
+    getUser,
     getAllDoodles,
     getDoodle,
     createDoodle,

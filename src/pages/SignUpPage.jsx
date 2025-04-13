@@ -17,6 +17,14 @@ import { FirebaseError } from "@firebase/util";
 
 const SignUpSchema = z
   .object({
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characters")
+      .max(15, "Username must be at most 15 characters")
+      .regex(
+        /^[a-zA-Z0-9_-]+$/,
+        "Username can only contain letters, numbers, underscores, and hyphens",
+      ),
     email: z.string().email(),
     password: z.string().min(6).max(20),
     confirm: z.string().min(6).max(20),
@@ -44,7 +52,7 @@ export default function SignUpPage() {
 
   async function onSubmit(values) {
     try {
-      await auth.signUp(values.email, values.password);
+      await auth.signUp(values.email, values.password, values.username);
     } catch (err) {
       if (err instanceof FirebaseError) {
         switch (err.code) {
@@ -68,6 +76,13 @@ export default function SignUpPage() {
       </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing={6}>
+          <FormControl isInvalid={!!errors.username}>
+            <FormLabel>Username</FormLabel>
+            <Input type="text" {...register("username")} />
+            <FormErrorMessage>
+              {errors.username && errors.username.message}
+            </FormErrorMessage>
+          </FormControl>
           <FormControl isInvalid={!!errors.email}>
             <FormLabel>Email</FormLabel>
             <Input type="text" {...register("email")} />
