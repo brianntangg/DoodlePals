@@ -6,7 +6,6 @@ import { useDb } from "../providers/DatabaseProvider.jsx";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTimer } from 'react-timer-hook'; // derrick's new code
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'; //Derrick's circular timer
-
 import { Text } from "@chakra-ui/react"; // derrick's new code
 
 
