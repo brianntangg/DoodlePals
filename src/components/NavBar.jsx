@@ -94,8 +94,9 @@ function LoggedInControls() {
 function LoggedInMenu() {
   return (
     <>
-      <MenuLink path="/">Plans</MenuLink>
-      <MenuLink path="/courses">Courses</MenuLink>
+      <MenuLink path="/doodles">My Doodles</MenuLink>
+      <MenuLink path="/community">Community Doodles</MenuLink>
+      <MenuLink path="/new">Create Doodle</MenuLink>
       <MenuDivider />
       <MenuLink path="/logout">Log out</MenuLink>
     </>
