@@ -93,13 +93,17 @@ function DoodlesPage() {
       </Box>
 
       <Button // Derrick's addition (Daily Doodle button)
-        as={ReactRouterLink}
-        to={`/new?daily=true&prompt=${encodeURIComponent(prompt)}`}
-        mt={8}
-        mb={12}
-        leftIcon={<Icon boxSize={5} as={BiTime} />}
-        colorScheme="purple"
-        isDisabled={loading}
+          as={ReactRouterLink}
+          to={
+            promptLoading
+                ? undefined
+                : `/new?daily=true&prompt=${encodeURIComponent(prompt)}`
+          }
+          mt={8}
+          mb={12}
+          leftIcon={<Icon boxSize={5} as={BiTime} />}
+          colorScheme="purple"
+          isDisabled={loading || promptLoading}
       >
         Daily Doodle
       </Button>
