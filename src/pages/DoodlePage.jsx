@@ -23,7 +23,6 @@ function DoodlePage() {
   const { id } = useParams();
   const [usernames, setUsernames] = useState({});
   const [comment, setComment] = useState("");
-  const [prompt, setPrompt] = useState('');
 
   useEffect(() => {
     if (!id) {
@@ -48,23 +47,6 @@ function DoodlePage() {
     ).then(() => setUsernames(u));
   }, [doodle]);
 
-  useEffect(() => {
-    // Fetch the daily prompt when component mounts
-    const fetchPrompt = async () => {
-      try {
-        console.log('Fetching prompt...');
-        const response = await fetch('http://localhost:3000/daily-prompt');
-        const data = await response.json();
-        console.log('Received prompt:', data);
-        setPrompt(data.prompt);
-      } catch (error) {
-        console.error('Error fetching prompt:', error);
-        setPrompt('Draw whatever inspires you today!'); // Fallback prompt
-      }
-    };
-
-    fetchPrompt();
-  }, []);
 
   async function post() {
     if (comment.trim() === "") return;
@@ -85,36 +67,11 @@ function DoodlePage() {
   }
 
   if (!doodle || !usernames) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Daily Doodle</h1>
-          
-          {/* Display the daily prompt */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 className="text-xl font-semibold mb-2">Today's Prompt:</h2>
-            <p className="text-gray-700 italic">{prompt}</p>
-          </div>
-
-          <Heading size="md" color="gray" textAlign="center" mt={12}>
-            Loading doodle...
-          </Heading>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Daily Doodle</h1>
-        
-        {/* Display the daily prompt */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-2">Today's Prompt:</h2>
-          <p className="text-gray-700 italic">{prompt}</p>
-        </div>
-
+      <>
         <Heading size="lg" textAlign="center" mt={12}>
           {doodle.title}
         </Heading>
@@ -180,9 +137,7 @@ function DoodlePage() {
               </Button>
             </Box>
           </Flex>
-        </HStack>
-      </div>
-    </div>
+        </HStack></>
   );
 }
 

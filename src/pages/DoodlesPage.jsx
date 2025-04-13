@@ -31,7 +31,7 @@ function DoodlesPage() {
         setPrompt(data.prompt);
       } catch (error) {
         console.error('Error fetching prompt:', error);
-        setPrompt('Draw whatever inspires you today!');
+        setPrompt('What does your emotional support creature look like today?');
       }
     };
 
