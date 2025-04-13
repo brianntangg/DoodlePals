@@ -1,8 +1,9 @@
 import { useRadioGroup, VStack } from "@chakra-ui/react";
 import ToolbarButton from "./ToolbarButton.jsx";
 import { BiEraser, BiPencil } from "react-icons/bi";
+import PenSizePicker from "./PenSizePicker.jsx";
 
-export default function Toolbar({ onChange }) {
+export default function Toolbar(props) {
   const options = [
     ["pencil", BiPencil],
     ["eraser", BiEraser],
@@ -10,15 +11,16 @@ export default function Toolbar({ onChange }) {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "tool",
     defaultValue: "pencil",
-    onChange,
+    onChange: props.setTool,
   });
   const group = getRootProps();
   return (
     <VStack {...group}>
       {options.map(([value, icon]) => {
         const radio = getRadioProps({ value });
-        return <ToolbarButton key={value} {...radio} icon={icon} />;
+        return <ToolbarButton key={value} {...radio} icon={icon} {...props} />;
       })}
+      <PenSizePicker {...props} />
     </VStack>
   );
 }

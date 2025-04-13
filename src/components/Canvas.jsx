@@ -121,7 +121,7 @@ function Canvas({ onSave, prompt, disabled }) {
           onMouseLeave={stopDrawing}
           onMouseMove={mouseMove}
         />
-        <Toolbar onChange={setTool} />
+        <Toolbar setTool={setTool} penSize={penSize} setPenSize={setPenSize} />
       </HStack>
     </VStack>
   );
