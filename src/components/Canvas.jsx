@@ -11,9 +11,76 @@ function Canvas({ onSave, prompt, disabled }) {
   const [penColor, setPenColor] = useState("#000000");
   const [tool, setTool] = useState("pencil");
 
-  function startDrawing() {
+  function getPixelColor(data, x, y, width) {
+    const i = (y * width + x) * 4;
+    return [data[i], data[i + 1], data[i + 2], data[i + 3]];
+  }
+
+  function setPixelColor(data, x, y, rgba, width) {
+    const i = (y * width + x) * 4;
+    [data[i], data[i + 1], data[i + 2], data[i + 3]] = rgba;
+  }
+
+  function hexToRgba(hex) {
+    const x = parseInt(hex.replace("#", ""), 16);
+    const r = (x >> 16) & 255;
+    const g = (x >> 8) & 255;
+    const b = x & 255;
+    return [r, g, b, 255];
+  }
+
+  function sameColor(c1, c2, tol) {
+    return (
+      Math.abs(c1[0] - c2[0]) <= tol &&
+      Math.abs(c1[1] - c2[1]) <= tol &&
+      Math.abs(c1[2] - c2[2]) <= tol &&
+      Math.abs(c1[3] - c2[3]) <= tol
+    );
+  }
+
+  function fill(e, tol = 30, res = 2) {
+    const canvas = ref.current;
+    const rect = canvas.getBoundingClientRect();
+    const ctx = canvas.getContext("2d");
+    const x = Math.floor((e.clientX - rect.left) / res) * res;
+    const y = Math.floor((e.clientY - rect.top) / res) * res;
+    const img = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const data = img.data;
+    const tc = getPixelColor(data, x, y, ctx.canvas.width);
+    const rc = hexToRgba(penColor);
+    if (sameColor(tc, rc, tol)) return;
+    let st = [[x, y]];
+    let vis = Array.from({ length: ctx.canvas.width }, () =>
+      Array(ctx.canvas.height).fill(false),
+    );
+    const dx = [0, 0, 1, -1];
+    const dy = [1, -1, 0, 0];
+    while (st.length) {
+      const [r, c] = st.pop();
+      if (vis[r][c]) continue;
+      vis[r][c] = true;
+      setPixelColor(data, r, c, rc, ctx.canvas.width);
+      for (let d = 0; d < 4; d++) {
+        const nx = r + dx[d],
+          ny = c + dy[d];
+        if (
+          nx >= 0 &&
+          nx < ctx.canvas.width &&
+          ny >= 0 &&
+          ny < ctx.canvas.height &&
+          sameColor(tc, getPixelColor(data, nx, ny, ctx.canvas.width), tol)
+        ) {
+          st.push([nx, ny]);
+        }
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+
+  function startDrawing(e) {
     if (disabled) return;
-    setDrawing(true);
+    if (tool === "bucket") fill(e);
+    else setDrawing(true);
   }
 
   function stopDrawing() {
