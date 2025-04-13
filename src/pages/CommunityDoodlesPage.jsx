@@ -75,6 +75,15 @@ function CommunityDoodlesPage() {
           }
           case "mostLiked":
             return (b.likes?.length || 0) - (a.likes?.length || 0);
+          case "oldest":
+            { const aTimeOld = a.createdAt?.toMillis ? a.createdAt.toMillis() : a.createdAt;
+            const bTimeOld = b.createdAt?.toMillis ? b.createdAt.toMillis() : b.createdAt;
+            return aTimeOld - bTimeOld; }
+          case "newest":
+            { const aTime = a.createdAt?.toMillis ? a.createdAt.toMillis() : a.createdAt;
+              const bTime = b.createdAt?.toMillis ? b.createdAt.toMillis() : b.createdAt;
+              return bTime - aTime;
+            }
           default:
             return 0;
         }
@@ -198,9 +207,11 @@ function CommunityDoodlesPage() {
             minW="150px"
             isDisabled={loading}
           >
+            <option value="oldest">Oldest First</option>
+            <option value="newest">Newest Liked</option>
+            <option value="mostLiked">Most Liked</option>
             <option value="mostCommented">Most Commented First</option>
             <option value="mostActive">Most Active First</option>
-            <option value="mostLiked">Most Liked</option>
           </Select>
         </Box>
 

@@ -10,7 +10,6 @@ import {
   updateDoc,
   query,
   where,
-  collectionGroup,
 } from "firebase/firestore";
 import { useAuth } from "./AuthProvider.jsx";
 
