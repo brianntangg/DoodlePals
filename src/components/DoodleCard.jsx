@@ -1,6 +1,5 @@
 import {
   Button,
-  ButtonGroup,
   Card,
   CardBody,
   CardFooter,
@@ -10,40 +9,39 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { BiComment, BiHeart } from "react-icons/bi";
+import { BiComment, BiHeart, BiSolidHeart } from "react-icons/bi";
 
-export default function DoodleCard({ id, doodle }) {
+export default function DoodleCard({ id, doodle, toggleLike, uid }) {
   const navigate = useNavigate();
   return (
-    <Card
-      _hover={{ bgColor: "gray.100" }}
-      w={360}
-      cursor="pointer"
-      onClick={() => navigate(`/doodle/${id}`)}
-    >
-      <CardHeader>
+    <Card w={360} cursor="pointer">
+      <CardHeader onClick={() => navigate(`/doodle/${id}`)}>
         <Heading size="md">{doodle.title}</Heading>
       </CardHeader>
-      <CardBody>
+      <CardBody onClick={() => navigate(`/doodle/${id}`)}>
         <Image src={doodle.data} className="border" />
       </CardBody>
-      <CardFooter>
-        <ButtonGroup gap={4}>
-          <Button
-            colorScheme="white"
-            leftIcon={<Icon boxSize={6} as={BiHeart} />}
-            variant="ghost"
-          >
-            {doodle.likes.length}
-          </Button>
-          <Button
-            colorScheme="white"
-            leftIcon={<Icon boxSize={6} as={BiComment} />}
-            variant="ghost"
-          >
-            {Object.keys(doodle.comments).length}
-          </Button>
-        </ButtonGroup>
+      <CardFooter justify="space-between" flexWrap="wrap">
+        <Button
+          leftIcon={
+            <Icon
+              boxSize={6}
+              as={doodle.likes.includes(uid) ? BiSolidHeart : BiHeart}
+              color="red"
+            />
+          }
+          variant="ghost"
+          onClick={toggleLike}
+        >
+          {doodle.likes.length}
+        </Button>
+        <Button
+          leftIcon={<Icon boxSize={6} as={BiComment} />}
+          variant="ghost"
+          onClick={() => navigate(`/doodle/${id}`)}
+        >
+          {Object.keys(doodle.comments).length}
+        </Button>
       </CardFooter>
     </Card>
   );

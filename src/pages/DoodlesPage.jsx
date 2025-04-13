@@ -12,16 +12,18 @@ import { useDb } from "../providers/DatabaseProvider.jsx";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { BiPencil } from "react-icons/bi";
 import DoodleCard from "../components/DoodleCard.jsx";
+import { useAuth } from "../providers/AuthProvider.jsx";
 
 function DoodlesPage() {
   const db = useDb();
+  const auth = useAuth();
   const [loading, setLoading] = useState(true);
-  const [plans, setPlans] = useState([]);
+  const [doodles, setDoodles] = useState([]);
 
   function update() {
     setLoading(true);
-    db.getAllDoodles().then((plans) => {
-      setPlans(plans);
+    db.getAllDoodles().then((doodles) => {
+      setDoodles(doodles);
       setLoading(false);
     });
   }
@@ -30,6 +32,23 @@ function DoodlesPage() {
     update();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function toggleLike(id) {
+    Promise.all(
+      doodles.map(async (d) => {
+        if (d.id !== id) return d;
+        const liked = d.likes.includes(auth.user.uid);
+        const newLikes = liked
+          ? d.likes.filter((id) => id !== auth.user.uid)
+          : [...d.likes, auth.user.uid];
+        await db.updateDoodle(id, { likes: newLikes });
+        return {
+          ...d,
+          likes: newLikes,
+        };
+      }),
+    ).then((res) => setDoodles(res));
+  }
 
   return (
     <Box p={10}>
@@ -49,11 +68,16 @@ function DoodlesPage() {
         <Heading size="md" color="gray">
           Loading&hellip;
         </Heading>
-      ) : plans.length ? (
+      ) : doodles.length ? (
         <Wrap spacing={6}>
-          {plans.map(({ id, ...doodle }) => (
+          {doodles.map(({ id, ...doodle }) => (
             <WrapItem key={id}>
-              <DoodleCard id={id} doodle={doodle} />
+              <DoodleCard
+                id={id}
+                doodle={doodle}
+                toggleLike={() => toggleLike(id)}
+                uid={auth.user.uid}
+              />
             </WrapItem>
           ))}
         </Wrap>
