@@ -8,6 +8,8 @@ import {
   getDocs,
   getFirestore,
   updateDoc,
+  query,
+  collectionGroup,
 } from "firebase/firestore";
 import { useAuth } from "./AuthProvider.jsx";
 
@@ -54,6 +56,26 @@ export default function DatabaseProvider({ children }) {
     await deleteDoc(doc(doodles(), id));
   }
 
+  async function getAllCommunityDoodles() {
+      const q = query(
+          collectionGroup(db, "doodles")
+      );
+
+      const snapshot = await getDocs(q);
+
+      const doodles = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          likes: data.likes || [],
+          comments: data.comments || {}
+        };
+      });
+
+      return doodles;
+  }
+
   const value = {
     doodles,
     getUser,
@@ -62,6 +84,7 @@ export default function DatabaseProvider({ children }) {
     createDoodle,
     updateDoodle,
     deleteDoodle,
+    getAllCommunityDoodles,
   };
 
   return (
