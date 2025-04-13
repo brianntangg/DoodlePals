@@ -1,13 +1,18 @@
 import { useRef, useState } from "react";
 import { Button, Heading, HStack, Icon, VStack } from "@chakra-ui/react";
 import { BiEraser, BiSave } from "react-icons/bi";
+import Toolbar from "./Toolbar.jsx";
 
-function Canvas({ onSave, prompt }) {
+function Canvas({ onSave, prompt, disabled }) {
   const ref = useRef(null);
   const [drawing, setDrawing] = useState(false);
   const [lastPos, setLastPos] = useState(null);
+  const [penSize, setPenSize] = useState(10);
+  const [penColor, setPenColor] = useState("black");
+  const [tool, setTool] = useState("pencil");
 
   function startDrawing() {
+    if (disabled) return;
     setDrawing(true);
   }
 
@@ -16,14 +21,33 @@ function Canvas({ onSave, prompt }) {
     setLastPos(null);
   }
 
-  function drawLine(ctx, x0, y0, x1, y1, sz = 1) {
+  function drawPoint(ctx, x, y) {
+    switch (tool) {
+      case "pencil":
+        ctx.beginPath();
+        ctx.arc(x, y, penSize / 2.0, 0, 2 * Math.PI);
+        ctx.fillStyle = penColor;
+        ctx.fill();
+        break;
+      case "eraser":
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.beginPath();
+        ctx.arc(x, y, penSize / 2.0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.restore();
+        break;
+    }
+  }
+
+  function drawLine(ctx, x0, y0, x1, y1, sz = 10) {
     let dx = Math.abs(x1 - x0);
     let dy = Math.abs(y1 - y0);
     let sx = x0 < x1 ? sz : -sz;
     let sy = y0 < y1 ? sz : -sz;
     let err = dx - dy;
     while (true) {
-      ctx.fillRect(x0, y0, sz, sz);
+      drawPoint(ctx, x0, y0);
       if (x0 === x1 && y0 === y1) break;
       const e2 = 2 * err;
       if (e2 > -dy) {
@@ -39,15 +63,19 @@ function Canvas({ onSave, prompt }) {
 
   function mouseMove(e) {
     if (!drawing) return;
-    const pixelSize = 10;
+    if (disabled) {
+      stopDrawing();
+      return;
+    }
+    const res = 1;
     const canvas = ref.current;
     const rect = canvas.getBoundingClientRect();
     const ctx = canvas.getContext("2d");
-    const x = Math.floor((e.clientX - rect.left) / pixelSize) * pixelSize;
-    const y = Math.floor((e.clientY - rect.top) / pixelSize) * pixelSize;
+    const x = Math.floor((e.clientX - rect.left) / res) * res;
+    const y = Math.floor((e.clientY - rect.top) / res) * res;
     ctx.fillStyle = "black";
-    if (lastPos) drawLine(ctx, lastPos.x, lastPos.y, x, y, pixelSize);
-    else ctx.fillRect(x, y, pixelSize, pixelSize);
+    if (lastPos) drawLine(ctx, lastPos.x, lastPos.y, x, y, res);
+    else drawPoint(ctx, x, y);
     setLastPos({ x, y });
   }
 
@@ -82,16 +110,19 @@ function Canvas({ onSave, prompt }) {
           Clear
         </Button>
       </HStack>
-      <canvas
-        ref={ref}
-        width={600}
-        height={600}
-        className="border"
-        onMouseDown={startDrawing}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-        onMouseMove={mouseMove}
-      />
+      <HStack spacing={6} align="top">
+        <canvas
+          ref={ref}
+          width={600}
+          height={600}
+          className="border"
+          onMouseDown={startDrawing}
+          onMouseUp={stopDrawing}
+          onMouseLeave={stopDrawing}
+          onMouseMove={mouseMove}
+        />
+        <Toolbar onChange={setTool} />
+      </HStack>
     </VStack>
   );
 }
