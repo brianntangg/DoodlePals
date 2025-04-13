@@ -9,6 +9,7 @@ import {
   getFirestore,
   updateDoc,
   query,
+  where,
   collectionGroup,
 } from "firebase/firestore";
 import { useAuth } from "./AuthProvider.jsx";
@@ -25,7 +26,7 @@ export default function DatabaseProvider({ children }) {
   const db = getFirestore();
 
   function doodles() {
-    return collection(db, "users", auth.user.uid, "doodles");
+    return collection(db, "doodles");
   }
 
   async function getUser(id) {
@@ -35,6 +36,13 @@ export default function DatabaseProvider({ children }) {
 
   async function getAllDoodles() {
     const snapshot = await getDocs(doodles());
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  }
+
+  async function getMyDoodles() {
+    const userId = auth.user.uid;
+    const doodlesQuery = query(doodles(), where("author", "==", userId));
+    const snapshot = await getDocs(doodlesQuery);
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   }
 
@@ -56,35 +64,15 @@ export default function DatabaseProvider({ children }) {
     await deleteDoc(doc(doodles(), id));
   }
 
-  async function getAllCommunityDoodles() {
-      const q = query(
-          collectionGroup(db, "doodles")
-      );
-
-      const snapshot = await getDocs(q);
-
-      const doodles = snapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          ...data,
-          likes: data.likes || [],
-          comments: data.comments || {}
-        };
-      });
-
-      return doodles;
-  }
-
   const value = {
     doodles,
     getUser,
     getAllDoodles,
+    getMyDoodles,
     getDoodle,
     createDoodle,
     updateDoodle,
     deleteDoodle,
-    getAllCommunityDoodles,
   };
 
   return (

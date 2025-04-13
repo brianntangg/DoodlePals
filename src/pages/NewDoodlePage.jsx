@@ -4,11 +4,12 @@ import { useState } from "react";
 import PublishDoodleForm from "../components/PublishDoodleForm.jsx";
 import { useDb } from "../providers/DatabaseProvider.jsx";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'; //Derrick's circular timer
-import { Text } from "@chakra-ui/react"; // derrick's new code
-
+import { CountdownCircleTimer } from "react-countdown-circle-timer"; //Derrick's circular timer
+import { Text } from "@chakra-ui/react";
+import { useAuth } from "../providers/AuthProvider.jsx"; // derrick's new code
 
 function NewDoodlePage() {
+  const auth = useAuth();
   const db = useDb();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -27,6 +28,8 @@ function NewDoodlePage() {
       prompt,
       likes: [],
       comments: {},
+      createTime: new Date(),
+      author: auth.user.uid,
     });
     navigate("/doodles");
   }
@@ -35,8 +38,8 @@ function NewDoodlePage() {
     <Flex flexDir="column" align="stretch" h="100%" gap={12} p={10}>
       <Heading size="lg">{preview ? "Publish" : "Create"} Doodle</Heading>
 
-
-      {isDaily && !preview && ( //Derrick's text and timer
+      {isDaily &&
+        !preview && ( //Derrick's text and timer
           <>
             <Text fontSize="xl" fontWeight="semibold" textAlign="center" mb={4}>
               {prompt}
@@ -44,35 +47,35 @@ function NewDoodlePage() {
 
             <HStack spacing={8} justify="center">
               <CountdownCircleTimer
-                  isPlaying
-                  duration={60}
-                  colors={["#73f16a", "#ffe270", "#f16565"]}
-                  colorsTime={[60, 20, 0]}
-                  size={100}
-                  strokeWidth={6}
-                  onComplete={() => {
-                    setTimerExpired(true);
-                    return { shouldRepeat: false };
-                  }}
-
+                isPlaying
+                duration={60}
+                colors={["#73f16a", "#ffe270", "#f16565"]}
+                colorsTime={[60, 20, 0]}
+                size={100}
+                strokeWidth={6}
+                onComplete={() => {
+                  setTimerExpired(true);
+                  return { shouldRepeat: false };
+                }}
               >
                 {({ remainingTime }) => (
-                    <Text fontSize="lg" fontWeight="bold">
-                      {remainingTime}s
-                    </Text>
+                  <Text fontSize="lg" fontWeight="bold">
+                    {remainingTime}s
+                  </Text>
                 )}
               </CountdownCircleTimer>
             </HStack>
           </>
-      )}
-
+        )}
 
       {preview ? (
         <PublishDoodleForm onPublish={publish} url={preview} />
       ) : (
         <HStack justify="center">
-          <Canvas onSave={(url) => setPreview(url)} prompt={prompt}
-                  disabled={isDaily && timerExpired} // Derrick's disabler!
+          <Canvas
+            onSave={(url) => setPreview(url)}
+            prompt={prompt}
+            disabled={isDaily && timerExpired} // Derrick's disabler!
           />
         </HStack>
       )}
