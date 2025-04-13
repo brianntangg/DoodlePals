@@ -8,12 +8,18 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 function NewDoodlePage() {
   const db = useDb();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const prompt = searchParams.get("prompt");
   const [preview, setPreview] = useState(null);
 
   async function publish(title) {
-    await db.createDoodle({ title, data: preview, prompt });
+    await db.createDoodle({
+      title,
+      data: preview,
+      prompt,
+      likes: [],
+      comments: {},
+    });
     navigate("/doodles");
   }
 

@@ -19,6 +19,24 @@ function DoodlesPage() {
   const auth = useAuth();
   const [loading, setLoading] = useState(true);
   const [doodles, setDoodles] = useState([]);
+  const [prompt, setPrompt] = useState('');
+
+  useEffect(() => {
+    const fetchPrompt = async () => {
+      try {
+        console.log('Fetching prompt...');
+        const response = await fetch('http://localhost:3000/daily-prompt');
+        const data = await response.json();
+        console.log('Received prompt:', data);
+        setPrompt(data.prompt);
+      } catch (error) {
+        console.error('Error fetching prompt:', error);
+        setPrompt('Draw whatever inspires you today!');
+      }
+    };
+
+    fetchPrompt();
+  }, []);
 
   function update() {
     setLoading(true);
@@ -53,6 +71,10 @@ function DoodlesPage() {
   return (
     <Box p={10}>
       <Heading size="lg">My Doodles</Heading>
+      <Box bg="white" rounded="lg" shadow="md" p={6} my={8}>
+        <Heading size="md" mb={2}>Today's Prompt:</Heading>
+        <Box color="gray.700" fontStyle="italic">{prompt}</Box>
+      </Box>
       <Button
         as={ReactRouterLink}
         to="/new"
