@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
   useDisclosure,
 } from "@chakra-ui/react";
-import { BiFontColor, BiFontSize } from "react-icons/bi";
+import { BiFontColor } from "react-icons/bi";
 import ToolbarIcon from "./ToolbarIcon.jsx";
 import { HexColorPicker } from "react-colorful";
 
@@ -19,7 +19,7 @@ export default function PenColorPicker({ penColor, setPenColor }) {
       placement="right"
     >
       <PopoverTrigger>
-        <ToolbarIcon icon={BiFontColor} />
+        <ToolbarIcon icon={BiFontColor} color={penColor} />
       </PopoverTrigger>
       <PopoverContent width="fit-content" p={2}>
         <PopoverBody>
