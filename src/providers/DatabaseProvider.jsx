@@ -26,10 +26,6 @@ export default function DatabaseProvider({ children }) {
     return collection(db, "users", auth.user.uid, "doodles");
   }
 
-  function comments(id) {
-    return collection(doodles(), id, "comments");
-  }
-
   async function getAllDoodles() {
     const snapshot = await getDocs(doodles());
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -53,29 +49,6 @@ export default function DatabaseProvider({ children }) {
     await deleteDoc(doc(doodles(), id));
   }
 
-  async function getAllComments(doodleId) {
-    const snapshot = await getDocs(comments(doodleId));
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  }
-
-  async function getComment(doodleId, id) {
-    const snapshot = await getDoc(doc(comments(doodleId), id));
-    return snapshot.data();
-  }
-
-  async function createComment(doodleId, comment) {
-    const docRef = await addDoc(comments(doodleId), comment);
-    return docRef.id;
-  }
-
-  async function updateComment(doodleId, id, comment) {
-    await updateDoc(doc(comments(doodleId), id), comment);
-  }
-
-  async function deleteComment(doodleId, id) {
-    await deleteDoc(doc(comments(doodleId), id));
-  }
-
   const value = {
     doodles,
     getAllDoodles,
@@ -83,12 +56,6 @@ export default function DatabaseProvider({ children }) {
     createDoodle,
     updateDoodle,
     deleteDoodle,
-    comments,
-    getAllComments,
-    getComment,
-    createComment,
-    updateComment,
-    deleteComment,
   };
 
   return (
