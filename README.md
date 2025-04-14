@@ -29,6 +29,27 @@
   - **Firestore**: A NoSQL database for storing user data, doodles, and interactions.
   - **Authentication**: Secure user login and account management using email verification.
 
+## Getting Started
+
+1. Clone the repository
+```bash
+git clone https://github.com/username/doodle-pal.git
+cd doodle-pal
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Start the development server
+```bash
+pnpm run dev
+```
+
+4. Access the application
+Open your browser and navigate to http://localhost:3000
+
 ## Art Therapy Benefits
 
 Research shows that creative expression through drawing can:
@@ -36,3 +57,5 @@ Research shows that creative expression through drawing can:
 - **Process complex emotions**
 - **Improve focus and mindfulness**
 - **Build self-awareness and confidence**
+
+
