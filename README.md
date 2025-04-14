@@ -28,6 +28,7 @@
 - **Firebase**: A Backend-as-a-Service platform providing the following services:
   - **Firestore**: A NoSQL database for storing user data, doodles, and interactions.
   - **Authentication**: Secure user login and account management using email verification.
+- **Node.js**: Back end web application framework for building RESTful APIs
 
 ## Getting Started
 
@@ -49,6 +50,22 @@ pnpm run dev
 
 4. Access the application
 Open your browser and navigate to http://localhost:3000
+
+## Algorithms Used
+
+### 1. Bresenham's Line Algorithm – Line Drawing
+- **What we learned:**
+  - An efficient way to draw a line between two points using only integer calculations—ideal for pixel grids.
+- **How we used it:**
+  - Implemented to connect mouse-dragged points smoothly on the canvas.
+  - Prevents gaps or jaggedness in user strokes by calculating next pixel positions precisely.
+
+### 2. DFS (Depth-First Search) – Bucket Fill Feature
+- **What we learned:**
+  - A flooding algorithm that finds areas of the same color in the image using a stack.
+- **How we used it:**
+  - Used to identify all connected pixels of the same color when the user clicks an area.
+  - Fills neighboring pixels to simulate a "paint bucket" tool (similar to MS Paint).
 
 ## Art Therapy Benefits
 
